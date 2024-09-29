@@ -56,11 +56,11 @@ export const authOptions: NextAuthOptions = {
           pass: process.env.EMAIL_PASSWORD || "",
         },
       },
-      from: process.env.EMAIL_FROM || "default@default.com",
+      from: process.env.EMAIL_FROM || "test@localhost.com",
       ...(process.env.NODE_ENV !== "production"
         ? {
             sendVerificationRequest({ url }) {
-              console.log("Login_link " + url);
+              console.log("LOGIN LINK " + url);
             },
           }
         : {}),

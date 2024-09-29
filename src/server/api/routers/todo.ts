@@ -6,24 +6,11 @@ export const todoRouter = createTRPCRouter({
   all: protectedProcedure.query(async ({ ctx }) => {
     const todos = await ctx.db.todos.findMany({
       where: {
-        id: ctx.session.user.id,
+        userId: ctx.session.user.id,
       },
     });
-    console.log(
-      "Prisma Todos " + todos.map(({ id, text, done }) => ({ id, text, done })),
-    );
-    return [
-      {
-        id: "fake",
-        text: "fake text1",
-        done: false,
-      },
-      {
-        id: "fake",
-        text: "fake text2",
-        done: true,
-      },
-    ];
+    console.log("SERVER SIDE TODOS LENGTH " + todos.length);
+    return todos;
   }),
   create: publicProcedure.input(todoInput).mutation(async ({ ctx, input }) => {
     return await ctx.db.todos.create({
@@ -58,6 +45,7 @@ export const todoRouter = createTRPCRouter({
         },
         data: {
           done: input.done,
+          updatedAt: new Date(),
         },
       });
     }),

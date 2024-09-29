@@ -5,7 +5,8 @@ import { AppRouter } from "~/server/api/root";
 import { createTRPCReact } from "@trpc/react-query";
 import Todo from "./todo";
 import toast from "react-hot-toast";
-
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 const UserTodos: React.FC<UserTodos> = ({ HandleSignOut }) => {
   const [text, setText] = useState("");
   const api = createTRPCReact<AppRouter>();
@@ -13,12 +14,13 @@ const UserTodos: React.FC<UserTodos> = ({ HandleSignOut }) => {
   const create_handler = api.todos.create.useMutation();
   const delete_handler = api.todos.delete.useMutation();
   const toggle_handler = api.todos.toggle.useMutation();
+  const session = useSession();
   const AddTodo = () => {
     create_handler.mutate(text, {
-      onSuccess() {
+      async onSuccess() {
         toast.success("Todo Added");
         setText("");
-        todos.refetch();
+        await todos.refetch();
       },
       onError() {
         toast.error("Could not add");
@@ -27,9 +29,9 @@ const UserTodos: React.FC<UserTodos> = ({ HandleSignOut }) => {
   };
   const DeleteTodo = (id: string) => {
     delete_handler.mutate(id, {
-      onSuccess() {
+      async onSuccess() {
         toast.success("Todo Deleted");
-        todos.refetch();
+        await todos.refetch();
       },
     });
     setText(text);
@@ -46,11 +48,12 @@ const UserTodos: React.FC<UserTodos> = ({ HandleSignOut }) => {
   };
 
   return (
-    <div className="flex h-[100vh] w-full items-center justify-center">
+    <div className="flex h-[100vh] flex-col w-full items-center justify-center">
       <div
         id="main-container"
-        className="mb-10 flex h-[500px] w-[500px] flex-col justify-start gap-10 border-2 p-5 pt-8 "
+        className="mb-10 flex h-[600px] w-[500px] flex-col justify-start gap-10 border-2 p-5 pt-8 "
       >
+        <div>Logged in as {session.data?.user.email}</div>
         <div id="create-input" className="w-full flex items-center gap-0  ">
           <input
             placeholder="Enter value"
@@ -69,7 +72,7 @@ const UserTodos: React.FC<UserTodos> = ({ HandleSignOut }) => {
         </div>
         <div
           id="todos-container"
-          className="w-full flex flex-col gap-5 overflow-y-auto h-full"
+          className="w-full flex flex-col gap-5 overflow-y-auto h-[500px]"
         >
           {todos.data?.map((val) => {
             return (
@@ -84,6 +87,14 @@ const UserTodos: React.FC<UserTodos> = ({ HandleSignOut }) => {
             );
           })}
         </div>
+        <button
+          onClick={async () => {
+            await signOut({ redirect: false });
+          }}
+          className="p-5 flex items-center justify-center bg-zinc-300/50"
+        >
+          Sign out
+        </button>
       </div>
     </div>
   );

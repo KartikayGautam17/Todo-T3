@@ -15,12 +15,12 @@ const Home = () => {
       router.push("/user/" + session.data.user.id);
     }
   }, [session]);
-  const HandleLogin = () => {
+  const HandleLogin = async () => {
     if (!Emailvalidator.validate(email)) {
       toast.error("Invalid email");
       return;
     }
-    signIn("email", { email });
+    await signIn("email", { email });
     //signIn();
   };
   const demoTodoText = "just some random todoTextlmaomorem oremore";
@@ -45,9 +45,7 @@ const Home = () => {
             Sign in
           </button>
         </div>
-        <div className="w-[400px]">
-          <Todo text={demoTodoText} done={false} />
-        </div>
+        <div className="w-[400px]"></div>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ const Todo: React.FC<todoProps> = ({ text, done, id, onToggle, onDelete }) => {
     onToggle(id, val);
   };
   return (
-    <div className="h-[80px] w-full border-2 border-zinc-300/50">
+    <div className="h-[60px] w-full border-2 border-zinc-300/50">
       <div className="relative flex h-full w-full items-center gap-5 bg-zinc-500/10 p-5">
         <span className="w-full p-2 font-light">{text}</span>
         <div className="absolute bottom-0 right-3 top-0 flex items-center justify-between gap-5 p-3 ">

@@ -49,14 +49,14 @@ export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       server: {
-        host: process.env.EMAIL_SERVER || "http://localhost:3000/",
+        host: process.env.EMAIL_SERVER ?? "http://localhost:3000/",
         port: 587,
         auth: {
           user: "apikey",
-          pass: process.env.EMAIL_PASSWORD || "",
+          pass: process.env.EMAIL_PASSWORD ?? "",
         },
       },
-      from: process.env.EMAIL_FROM || "test@localhost.com",
+      from: process.env.EMAIL_FROM ?? "test@localhost.com",
       ...(process.env.NODE_ENV !== "production"
         ? {
             sendVerificationRequest({ url }) {

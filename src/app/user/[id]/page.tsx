@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import InvalidSession from "~/app/redirects/invalid-session";
 import { useRouter, useParams } from "next/navigation";
 import UserTodos from "~/app/_components/user-todo";
-const User: React.FC<any> = () => {
+const User = () => {
   const session = useSession();
   const router = useRouter();
   const userParams = useParams<{ id: string }>();
@@ -24,7 +24,11 @@ const User: React.FC<any> = () => {
       await signOut({ redirect: false });
       toast.success("signed out");
     };
-    return <UserTodos HandleSignOut={HandleSignOut} />;
+    return (
+      <div>
+        <UserTodos HandleSignOut={HandleSignOut} />;
+      </div>
+    );
   }
 };
 export default User;
